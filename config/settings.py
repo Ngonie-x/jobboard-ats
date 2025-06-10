@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import os
 import environ
 
 env = environ.Env()
@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "api",
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Media files (user-uploaded files)
+MEDIA_URL = "/media/"  # URL prefix for browser access
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # Local storage directory
