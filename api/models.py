@@ -35,6 +35,7 @@ class Job(models.Model):
     posted_by = models.ForeignKey(get_user_model(), on_delete=models.DO_NOTHING)
     is_active = models.BooleanField(default=False)
     expired_at = models.DateField()
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.title} - {self.company}"
