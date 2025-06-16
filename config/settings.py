@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "django_filters",
+    "accounts",
     "api",
 ]
 
@@ -139,3 +140,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Media files (user-uploaded files)
 MEDIA_URL = "/media/"  # URL prefix for browser access
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # Local storage directory
+
+
+AUTH_USER_MODEL = "accounts.CustomUser"
