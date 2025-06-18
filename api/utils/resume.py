@@ -69,7 +69,6 @@ def extract_resume_sections_from_pdf(pdf_file_object):
                                     {"text": line_text, "size": first_char_size}
                                 )
     except Exception as e:
-        print(f"Error processing PDF {pdf_path}: {e}")
         return {}
 
     if not lines_with_meta:
