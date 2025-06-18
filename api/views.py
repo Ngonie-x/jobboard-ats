@@ -1,3 +1,4 @@
+import tempfile, os
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
@@ -30,7 +31,17 @@ class ResumeViewset(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         pdf = self.request.FILES.get("file")
-        pdf_sections = extract_resume_sections_from_pdf(pdf)
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+            for chunk in pdf.chunks():
+                tmp.write(chunk)
+            tmp_path = tmp.name
+
+        try:
+            pdf_sections = extract_resume_sections_from_pdf(tmp_path)
+        finally:
+            os.unlink(tmp_path)
+        print(pdf_sections)
         serializer.save(user=self.request.user, parsed_data=pdf_sections)
 
 
@@ -43,7 +54,7 @@ class ApplicationViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(
-            Q(user=self.request.user) | Q(job__posted_by__is_admin=True)
+            Q(user=self.request.user) | Q(job__posted_by__is_staff=True)
         )
 
     def perform_create(self, serializer):
