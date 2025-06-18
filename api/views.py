@@ -6,6 +6,7 @@ from django.db.models import Q
 from .models import Company, Job, Resume, Application
 from . import serializers
 from .permissions import ReadOnly, IsOwnerOrReadOnly, IsAdminOrOwner
+from .utils.resume import extract_resume_sections_from_pdf
 
 
 class CompanyViewset(viewsets.ModelViewSet):
@@ -28,7 +29,9 @@ class ResumeViewset(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        pdf = self.request.FILES.get("file")
+        pdf_sections = extract_resume_sections_from_pdf(pdf)
+        serializer.save(user=self.request.user, parsed_data=pdf_sections)
 
 
 class ApplicationViewset(viewsets.ModelViewSet):
@@ -45,3 +48,13 @@ class ApplicationViewset(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        # Check if a new file is being uploaded
+        if "file" in serializer.validated_data:
+            uploaded_file = serializer.validated_data.get("file")
+            pdf_sections = extract_resume_sections_from_pdf(uploaded_file)
+            serializer.save(parsed_data=pdf_sections)
+        else:
+            # No new file, just save other changes
+            serializer.save()
