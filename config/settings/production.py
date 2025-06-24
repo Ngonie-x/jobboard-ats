@@ -1,9 +1,6 @@
 from pathlib import Path
 import os
-import environ
-
-env = environ.Env()
-environ.Env.read_env()
+from config.settings import get_secret
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -14,12 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-1g6%7rfhj1s6d_rnjt_z#0l(6u_4^pe_bkj+811ob@z09u+voz"
+SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -87,11 +84,11 @@ REST_FRAMEWORK = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("DBNAME"),
-        "USER": env("USER"),
-        "PASSWORD": env("DBPASSWORD"),
+        "NAME": get_secret("DBNAME"),
+        "USER": get_secret("USER"),
+        "PASSWORD": get_secret("DBPASSWORD"),
         "HOST": "localhost",
-        "PORT": env("PORT"),
+        "PORT": get_secret("PORT"),
     }
 }
 
