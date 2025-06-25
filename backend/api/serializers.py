@@ -4,6 +4,8 @@ from .models import Company, Job, Resume, Application
 
 
 class CompanySerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+
     class Meta:
         model = Company
         fields = "__all__"
@@ -11,6 +13,8 @@ class CompanySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class JobSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+
     class Meta:
         model = Job
         fields = "__all__"
@@ -18,6 +22,8 @@ class JobSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ResumeSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+
     class Meta:
         model = Resume
         fields = "__all__"
@@ -25,6 +31,8 @@ class ResumeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ApplicationSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+
     class Meta:
         model = Application
         fields = "__all__"
