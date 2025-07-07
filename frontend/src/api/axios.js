@@ -58,5 +58,14 @@ export const fetchJobs = async ()=>{
 }
 
 
+export const fetchJob = async (id) =>{
+    try{
+        const response = await api.get(`api/jobs/${id}/`);
+        return response.data;
+    }catch(error){
+        console.log("Failed to fetch job:", error);
+    }
+}
+
 
 export default api;
