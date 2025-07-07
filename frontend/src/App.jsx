@@ -1,22 +1,36 @@
-import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import './App.css';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
+import JobDetailPage from './pages/JobDetailPage';
+import { loader as jobLoader } from './pages/JobDetailPage';
 import PrivateRoute from './components/PrivateRoute';
+import Root from './pages/Root';
 
+const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/',
+    element: <Root />,
+    children: [
+      {
+        index: true,
+        element: <PrivateRoute><HomePage /></PrivateRoute>
+      },
+      {
+        path: 'jobs/:id',
+        element: <PrivateRoute><JobDetailPage /></PrivateRoute>,
+        loader: jobLoader
+      }
+    ]
+  }
+]);
 
 function App() {
-
-  return (
-    <Router>
-      <Routes>
-        <Route path='/login' element={<LoginPage/>} />
-        <Route path='/home' element={<PrivateRoute><HomePage/></PrivateRoute>} />
-        <Route path="/" element={<LoginPage />} />
-      </Routes>
-      
-    </Router>
-  )
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
